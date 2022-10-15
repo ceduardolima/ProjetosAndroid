@@ -8,4 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
+
+    <color name="default_font_color">#CC000000</color>
+    <color name="grey_font_color">#565656</color>
+    <color name="grey_50">#80EAEAEA</color>
+    <color name="grey">#D6D6D6</color>
+    <color name="salmon">#fc93a1</color>
 </resources>
