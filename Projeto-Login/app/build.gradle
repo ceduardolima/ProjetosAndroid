@@ -54,4 +54,6 @@ dependencies {
 
     // Jetpack Compose Integration
     implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
 }
