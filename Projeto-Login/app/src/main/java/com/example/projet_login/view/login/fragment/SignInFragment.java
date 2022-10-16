@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.example.projet_login.R;
 import com.example.projet_login.databinding.FragmentSignInBinding;
+import com.example.projet_login.repository.google.GoogleSignInRepository;
+import com.example.projet_login.view.login.LoginActivity;
 import com.example.projet_login.view.profile.ProfileActivity;
 import com.example.projet_login.viewModel.login.SignInViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -27,10 +29,11 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Objects;
+
 public class SignInFragment extends Fragment {
+    private GoogleSignInRepository googleSignInRepository;
     private FragmentSignInBinding binding;
-    private GoogleSignInOptions googleSignInOptions;
-    private GoogleSignInClient googleSignInClient;
     private SignInViewModel signInViewModel;
     private final int RC_SIGN_IN = 0;
 
@@ -41,16 +44,10 @@ public class SignInFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initGoogleSignIn();
+        googleSignInRepository = new GoogleSignInRepository(requireContext());
         initViewModel();
         observerProgressBarStatus();
-    }
-
-    private void initGoogleSignIn() {
-        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions);
+        observerLoggedWithSuccess();
     }
 
     private void initViewModel() {
@@ -66,12 +63,25 @@ public class SignInFragment extends Fragment {
         });
     }
 
-    public void ableProgressBar() {
+    private void observerLoggedWithSuccess() {
+        signInViewModel.getLoggedWithSuccess().observe(requireActivity(), (success) -> {
+            if (success) changeToProfileActivity();
+        });
+    }
+
+    private void changeToProfileActivity() {
+        Intent intent = new Intent(requireContext(), ProfileActivity.class);
+        startActivity(intent);
+        requireActivity().finish();
+    }
+
+
+    private void ableProgressBar() {
         binding.signInContainerView.setVisibility(View.INVISIBLE);
         binding.signInProgressBar.setVisibility(View.VISIBLE);
     }
 
-    public void disableProgressBar() {
+    private void disableProgressBar() {
         binding.signInContainerView.setVisibility(View.VISIBLE);
         binding.signInProgressBar.setVisibility(View.INVISIBLE);
     }
@@ -89,7 +99,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void signIn() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
+        Intent signInIntent = googleSignInRepository.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -97,7 +107,7 @@ public class SignInFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            Task<GoogleSignInAccount> task = googleSignInRepository.getSignedInAccountFromIntent(data);
             signInViewModel.setProgressBarStatus(true);
             handleSignInResult(task);
         }
@@ -107,15 +117,10 @@ public class SignInFragment extends Fragment {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             signInViewModel.setProgressBarStatus(false);
-            navigateToProfileActivity();
+            signInViewModel.setLoggedWithSuccess(true);
         } catch (ApiException e) {
             Log.w("google_sign_in", "signInResult:failed code=" + e.getStatusCode());
         }
-    }
-
-    private void navigateToProfileActivity() {
-        Intent intent = new Intent(requireContext(), ProfileActivity.class);
-        startActivity(intent);
     }
 
     @Override
