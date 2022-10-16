@@ -63,6 +63,16 @@ public class SignInFragment extends Fragment {
         });
     }
 
+    private void ableProgressBar() {
+        binding.signInContainerView.setVisibility(View.INVISIBLE);
+        binding.signInProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void disableProgressBar() {
+        binding.signInContainerView.setVisibility(View.VISIBLE);
+        binding.signInProgressBar.setVisibility(View.INVISIBLE);
+    }
+
     private void observerLoggedWithSuccess() {
         signInViewModel.getLoggedWithSuccess().observe(requireActivity(), (success) -> {
             if (success) changeToProfileActivity();
@@ -75,15 +85,15 @@ public class SignInFragment extends Fragment {
         requireActivity().finish();
     }
 
-
-    private void ableProgressBar() {
-        binding.signInContainerView.setVisibility(View.INVISIBLE);
-        binding.signInProgressBar.setVisibility(View.VISIBLE);
+    @Override
+    public void onStart() {
+        super.onStart();
+        verifyIfHasSignInBefore();
     }
 
-    private void disableProgressBar() {
-        binding.signInContainerView.setVisibility(View.VISIBLE);
-        binding.signInProgressBar.setVisibility(View.INVISIBLE);
+    private void verifyIfHasSignInBefore() {
+        if (googleSignInRepository.hasSignInBefore())
+            changeToProfileActivity();
     }
 
     @Override

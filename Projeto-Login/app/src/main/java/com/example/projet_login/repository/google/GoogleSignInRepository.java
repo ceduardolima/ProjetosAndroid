@@ -12,12 +12,14 @@ import com.google.android.gms.tasks.Task;
 public class GoogleSignInRepository {
     private final GoogleSignInOptions googleSignInOptions;
     private final GoogleSignInClient googleSignInClient;
+    private final GoogleSignInAccount account;
 
     public GoogleSignInRepository(Context context) {
         googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(context, googleSignInOptions);
+        account = GoogleSignIn.getLastSignedInAccount(context);
         googleSignInClient.signOut();
     }
 
@@ -27,5 +29,13 @@ public class GoogleSignInRepository {
 
     public Task<GoogleSignInAccount> getSignedInAccountFromIntent(Intent data) {
         return GoogleSignIn.getSignedInAccountFromIntent(data);
+    }
+
+    public Boolean hasSignInBefore() {
+        return account != null;
+    }
+
+    public GoogleSignInAccount getAccount() {
+        return account;
     }
 }
