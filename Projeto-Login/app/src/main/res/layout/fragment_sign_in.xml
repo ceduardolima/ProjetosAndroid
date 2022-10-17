@@ -19,6 +19,7 @@
         android:id="@+id/sign_in_container_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="@dimen/activity_horizontal_padding"
         tools:context=".view.login.fragment.SignInFragment">
 
         <ImageView
@@ -61,42 +62,43 @@
             app:layout_constraintTop_toBottomOf="@id/sign_in_image" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/sign_in_google"
+            android:id="@+id/sign_in_google_button"
             style="@style/sign_in_button_style"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/grey_50"
             android:drawableLeft="@drawable/google"
             android:text="Continue with Google"
-            app:layout_constraintBottom_toTopOf="@id/sign_in_email"
+            app:layout_constraintBottom_toTopOf="@id/sign_in_email_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sign_in_text"
             tools:ignore="RtlSymmetry" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/sign_in_email"
+            android:id="@+id/sign_in_email_button"
             style="@style/sign_in_button_style"
             android:backgroundTint="@color/grey_50"
             android:drawableLeft="@drawable/email"
             android:text="Continue with email"
-            app:layout_constraintBottom_toTopOf="@id/sign_in_create_account"
+            app:layout_constraintBottom_toTopOf="@id/sign_in_create_account_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sign_in_google"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_google_button"
             tools:ignore="RtlSymmetry" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/sign_in_create_account"
+            android:id="@+id/sign_in_create_account_button"
             style="@style/sign_in_button_style"
             android:drawableLeft="@drawable/add_user"
             android:text="Sign up"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sign_in_email"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_email_button"
             app:strokeColor="@color/grey"
             app:strokeWidth="1dp"
             tools:ignore="RtlSymmetry" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>

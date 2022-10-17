@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="20dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/sign_in_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textSize="14pt"
+            android:textColor="@color/default_font_color"
+            android:textAlignment="center"
+            android:fontFamily="@font/roboto_medium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sign_in_email_input"
+            style="@style/sign_in_text_input_layout"
+            android:layout_height="70dp"
+            android:hint="Email"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintVertical_bias="0.05"
+            app:startIconDrawable="@drawable/ic_email"
+            app:startIconTint="@color/text_hint_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_title"
+            app:layout_constraintBottom_toTopOf="@id/sign_in_password_input">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/default_font_color"
+                android:textSize="8pt" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sign_in_password_input"
+            style="@style/sign_in_text_input_layout"
+            android:layout_height="70dp"
+            android:hint="Password"
+            android:layout_marginBottom="10dp"
+            app:startIconDrawable="@drawable/ic_lock"
+            app:startIconTint="@color/text_hint_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_email_input"
+            app:layout_constraintBottom_toTopOf="@id/sign_in_button">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/default_font_color"
+                android:textSize="8pt" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            style="@style/default_button"
+            android:id="@+id/sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginBottom="10dp"
+            android:text="Sign In"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_password_input"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

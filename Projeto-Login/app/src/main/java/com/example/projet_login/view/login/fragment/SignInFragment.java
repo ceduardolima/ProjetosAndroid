@@ -105,7 +105,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void signInButton() {
-        binding.signInGoogle.setOnClickListener((view) -> signIn());
+        binding.signInGoogleButton.setOnClickListener((view) -> signIn());
     }
 
     private void signIn() {

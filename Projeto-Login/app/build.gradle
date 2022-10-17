@@ -56,4 +56,9 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
     implementation 'com.google.android.gms:play-services-auth:20.3.0'
+
+    api 'com.google.android.material:material:1.8.0-alpha01'
+
+    implementation 'com.github.roiacult:BackdropLayout:2.3'
+
 }

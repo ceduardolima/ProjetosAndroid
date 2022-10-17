@@ -9,5 +9,21 @@
         android:id="@+id/signInFragment"
         android:name="com.example.projet_login.view.login.fragment.SignInFragment"
         android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in" />
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_signInEmailFragment"
+            app:destination="@id/signInEmailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInEmailFragment"
+        android:name="com.example.projet_login.view.login.fragment.SignInEmailFragment"
+        android:label="fragment_sign_in_email"
+        tools:layout="@layout/dialog_sign_in_email" >
+        <action
+            android:id="@+id/action_signInEmailFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_signInEmailFragment"
+        app:destination="@id/signInEmailFragment" />
 </navigation>
