@@ -1,35 +1,29 @@
 package com.example.projet_login.view.login.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.projet_login.R;
 import com.example.projet_login.databinding.FragmentSignInBinding;
 import com.example.projet_login.repository.google.GoogleSignInRepository;
-import com.example.projet_login.view.login.LoginActivity;
 import com.example.projet_login.view.profile.ProfileActivity;
 import com.example.projet_login.viewModel.login.SignInViewModel;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Objects;
 
 public class SignInFragment extends Fragment {
     private GoogleSignInRepository googleSignInRepository;
@@ -100,11 +94,12 @@ public class SignInFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSignInBinding.inflate(inflater, container, false);
-        signInButton();
+        signInGoogleButton();
+        signInEmailButton();
         return binding.getRoot();
     }
 
-    private void signInButton() {
+    private void signInGoogleButton() {
         binding.signInGoogleButton.setOnClickListener((view) -> signIn());
     }
 
@@ -131,6 +126,22 @@ public class SignInFragment extends Fragment {
         } catch (ApiException e) {
             Log.w("google_sign_in", "signInResult:failed code=" + e.getStatusCode());
         }
+    }
+
+    private void signInEmailButton() {
+        binding.signInEmailButton.setOnClickListener( view -> {
+            createSignInDialog();
+        });
+    }
+
+    private void createSignInDialog() {
+        final Dialog dialog = new Dialog(requireActivity(), R.style.DialogSlideAnim);
+        dialog.setContentView(R.layout.dialog_sign_in_email);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.create();
+        dialog.show();
     }
 
     @Override

@@ -22,4 +22,14 @@
     <style name="Theme.ProjetLogin.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ProjetLogin.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="dialog_animation">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
+
+    <style name="DialogSlideAnim" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/dialog_animation</item>
+    </style>
 </resources>
