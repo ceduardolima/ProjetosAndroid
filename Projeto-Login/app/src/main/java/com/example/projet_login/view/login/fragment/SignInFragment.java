@@ -142,6 +142,11 @@ public class SignInFragment extends Fragment {
 
     private void createSignInDialog() {
         final Dialog dialog = new Dialog(requireActivity(), R.style.DialogSlideAnim);
+        configDialog(dialog);
+        dialog.show();
+    }
+
+    private void configDialog(Dialog dialog) {
         dialog.setContentView(R.layout.dialog_sign_in_email);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
@@ -149,7 +154,6 @@ public class SignInFragment extends Fragment {
         dialogSignInButton(dialog.getWindow());
         dialogCloseButton(dialog);
         dialog.create();
-        dialog.show();
     }
 
     private void dialogSignInButton(Window dialogWindow) {
