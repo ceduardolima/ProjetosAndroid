@@ -98,6 +98,7 @@ public class SignInFragment extends Fragment {
         binding = FragmentSignInBinding.inflate(inflater, container, false);
         signInGoogleButton();
         signInEmailButton();
+        signUpButton();
         return binding.getRoot();
     }
 
@@ -165,6 +166,39 @@ public class SignInFragment extends Fragment {
 
     private void dialogCloseButton(Dialog dialog) {
         ImageButton closeDialogButton = dialog.getWindow().findViewById(R.id.sign_in_close_dialog_button);
+        closeDialogButton.setOnClickListener(view -> dialog.cancel());
+
+    }
+
+    private void signUpButton() {
+        binding.signInCreateAccountButton.setOnClickListener(view -> createSignUpDialog());
+    }
+
+    private void createSignUpDialog() {
+        final Dialog dialog = new Dialog(requireActivity(), R.style.DialogSlideAnim);
+        configSignUpDialog(dialog);
+        dialog.show();
+    }
+
+    private void configSignUpDialog(Dialog dialog) {
+        dialog.setContentView(R.layout.dialog_sign_up);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialogSignUpButton(dialog.getWindow());
+        dialogSignUpCloseButton(dialog);
+        dialog.create();
+    }
+
+    private void dialogSignUpButton(Window dialogWindow) {
+        Button signUpButton = dialogWindow.findViewById(R.id.sign_up_button);
+        signUpButton.setOnClickListener(view -> {
+            // Sign up
+        });
+    }
+
+    private void dialogSignUpCloseButton(Dialog dialog) {
+        ImageButton closeDialogButton = dialog.getWindow().findViewById(R.id.sign_up_close_dialog_button);
         closeDialogButton.setOnClickListener(view -> dialog.cancel());
 
     }
