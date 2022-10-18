@@ -14,6 +14,7 @@
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/drawable/progress_bar.xml" value="0.15" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/drawable/round_corners.xml" value="0.2485" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/drawable/round_edges.xml" value="0.2485" />
+        <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/drawable/round_superior_corners.xml" value="0.2485" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/drawable/sign_in_button_drawable.xml" value="0.176" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/drawable/superior_round_edge_shape.xml" value="0.3165" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/font-v26/roboto.xml" value="0.32592592592592595" />
@@ -22,6 +23,7 @@
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/layout/activity_profile.xml" value="0.31765711842667804" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/layout/activity_splash.xml" value="0.24114583333333334" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/layout/dialog_sign_in_email.xml" value="0.31765711842667804" />
+        <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/layout/dialog_sign_up.xml" value="0.31680205215904234" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/layout/fragment_sign_in.xml" value="0.31765711842667804" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/layout/fragment_sign_in_email.xml" value="0.31765711842667804" />
         <entry key="..\:/Documentos/Programacao/ProjetosAndroid/Projeto-Login/app/src/main/res/layout/fragment_sign_in_fragment.xml" value="0.31765711842667804" />
