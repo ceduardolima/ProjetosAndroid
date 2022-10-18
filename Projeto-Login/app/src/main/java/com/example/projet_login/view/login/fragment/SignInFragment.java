@@ -1,20 +1,22 @@
 package com.example.projet_login.view.login.fragment;
 
+import android.accounts.Account;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.util.Log;
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.projet_login.R;
 import com.example.projet_login.databinding.FragmentSignInBinding;
@@ -113,7 +115,6 @@ public class SignInFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = googleSignInRepository.getSignedInAccountFromIntent(data);
-            signInViewModel.setProgressBarStatus(true);
             handleSignInResult(task);
         }
     }
@@ -121,17 +122,22 @@ public class SignInFragment extends Fragment {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            signInViewModel.setProgressBarStatus(false);
-            signInViewModel.setLoggedWithSuccess(true);
+            setLoggedWithSuccessIfAccountIsNotNull(account.getAccount());
         } catch (ApiException e) {
             Log.w("google_sign_in", "signInResult:failed code=" + e.getStatusCode());
+            setLoggedWithSuccessIfAccountIsNotNull(null);
+        }
+    }
+
+    private void setLoggedWithSuccessIfAccountIsNotNull(Account account) {
+        if (account != null) {
+            signInViewModel.setProgressBarStatus(false);
+            signInViewModel.setLoggedWithSuccess(true);
         }
     }
 
     private void signInEmailButton() {
-        binding.signInEmailButton.setOnClickListener( view -> {
-            createSignInDialog();
-        });
+        binding.signInEmailButton.setOnClickListener(view -> createSignInDialog());
     }
 
     private void createSignInDialog() {
@@ -140,8 +146,23 @@ public class SignInFragment extends Fragment {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialogSignInButton(dialog.getWindow());
+        dialogCloseButton(dialog);
         dialog.create();
         dialog.show();
+    }
+
+    private void dialogSignInButton(Window dialogWindow) {
+        Button signInButton = dialogWindow.findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(view -> {
+            // Login
+        });
+    }
+
+    private void dialogCloseButton(Dialog dialog) {
+        ImageButton closeDialogButton = dialog.getWindow().findViewById(R.id.sign_in_close_dialog_button);
+        closeDialogButton.setOnClickListener(view -> dialog.cancel());
+
     }
 
     @Override

@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:src="@drawable/ic_arrow_down"
-            android:rotation="-90"
             app:tint="@color/grey"
             android:backgroundTint="@color/transparent"
             app:layout_constraintTop_toTopOf="parent"
