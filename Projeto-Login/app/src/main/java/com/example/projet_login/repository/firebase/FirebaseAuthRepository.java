@@ -11,16 +11,16 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-public class FirebaseRepository {
+public class FirebaseAuthRepository {
     private final FirebaseAuth auth;
-    private final Firebase
     private final Application application;
     private FirebaseUser currentUser;
 
-    public FirebaseRepository(Application application) {
+    public FirebaseAuthRepository(Application application) {
         auth = FirebaseAuth.getInstance();
         this.application = application;
         currentUser = auth.getCurrentUser();

@@ -1,6 +1,5 @@
 package com.example.projet_login.viewModel.login;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 
@@ -8,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.projet_login.repository.firebase.FirebaseRepository;
+import com.example.projet_login.repository.firebase.FirebaseAuthRepository;
 import com.example.projet_login.repository.google.GoogleSignInRepository;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
@@ -17,7 +16,7 @@ public class LoginViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> loggedWithSuccess = new MutableLiveData<>();
     private final MutableLiveData<Boolean> progressBarStatus = new MutableLiveData<>();
     private final MutableLiveData<Boolean> signUpButtonClick = new MutableLiveData<>();
-    private final FirebaseRepository firebaseRepository;
+    private final FirebaseAuthRepository firebaseAuthRepository;
     private final GoogleSignInRepository googleSignInRepository;
 
 
@@ -25,7 +24,7 @@ public class LoginViewModel extends AndroidViewModel {
         super(application);
         progressBarStatus.setValue(false);
         loggedWithSuccess.setValue(false);
-        firebaseRepository = new FirebaseRepository(application);
+        firebaseAuthRepository = new FirebaseAuthRepository(application);
         googleSignInRepository = new GoogleSignInRepository(application);
     }
 
@@ -63,10 +62,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void signUp(String email, String password) {
         if ((!email.isEmpty() && !password.isEmpty()))
-            firebaseRepository.createUserWithEmail(email, password);
+            firebaseAuthRepository.createUserWithEmail(email, password);
     }
 
     public Boolean isUserLogged() {
-        return firebaseRepository.isUserLogged();
+        return firebaseAuthRepository.isUserLogged();
     }
 }
