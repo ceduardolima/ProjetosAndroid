@@ -16,6 +16,7 @@ import java.util.Objects;
 
 public class FirebaseRepository {
     private final FirebaseAuth auth;
+    private final Firebase
     private final Application application;
     private FirebaseUser currentUser;
 
