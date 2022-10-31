@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clipToPadding="false"
-    tools:context=".view.login.fragment.SignInFragment">
+    tools:context=".view.login.fragment.LoginFragment">
 
     <ProgressBar
         android:id="@+id/sign_in_progress_bar"
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/activity_horizontal_padding"
-        tools:context=".view.login.fragment.SignInFragment">
+        tools:context=".view.login.fragment.LoginFragment">
 
         <ImageView
             android:id="@+id/sign_in_image"

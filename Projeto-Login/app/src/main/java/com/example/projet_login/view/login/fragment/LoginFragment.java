@@ -19,9 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.projet_login.R;
-import com.example.projet_login.databinding.FragmentSignInBinding;
+import com.example.projet_login.databinding.FragmentLoginBinding;
 import com.example.projet_login.view.profile.ProfileActivity;
-import com.example.projet_login.viewModel.login.SignInViewModel;
+import com.example.projet_login.viewModel.login.LoginViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
@@ -29,14 +29,14 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
 
-public class SignInFragment extends Fragment {
-    private FragmentSignInBinding binding;
-    private SignInViewModel signInViewModel;
+public class LoginFragment extends Fragment {
+    private FragmentLoginBinding binding;
+    private LoginViewModel loginViewModel;
     private Dialog signUpDialog;
     private Dialog signInDialog;
     private final int RC_SIGN_IN = 0;
 
-    public SignInFragment() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
@@ -50,11 +50,11 @@ public class SignInFragment extends Fragment {
     }
 
     private void initViewModel() {
-        signInViewModel = new ViewModelProvider(requireActivity()).get(SignInViewModel.class);
+        loginViewModel = new ViewModelProvider(requireActivity()).get(LoginViewModel.class);
     }
 
     private void observerProgressBarStatus() {
-        signInViewModel.getProgressBarStatus().observe(requireActivity(), (status) -> {
+        loginViewModel.getProgressBarStatus().observe(requireActivity(), (status) -> {
             if (status)
                 ableProgressBar();
             else
@@ -73,7 +73,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void observerLoggedWithSuccess() {
-        signInViewModel.getLoggedWithSuccess().observe(requireActivity(), (success) -> {
+        loginViewModel.getLoggedWithSuccess().observe(requireActivity(), (success) -> {
             if (success) changeToProfileActivity();
         });
     }
@@ -85,12 +85,12 @@ public class SignInFragment extends Fragment {
     }
 
     private void observerSignUpButton() {
-        signInViewModel.getSignUpButtonClick().observe(requireActivity(), click -> {
+        loginViewModel.getSignUpButtonClick().observe(requireActivity(), click -> {
             if (click) {
                 Window dialogWindow = signUpDialog.getWindow();
                 createAccount(dialogWindow);
             }
-            signInViewModel.setSignUpButtonClick(false);
+            loginViewModel.setSignUpButtonClick(false);
         });
     }
 
@@ -99,7 +99,7 @@ public class SignInFragment extends Fragment {
         TextInputEditText passwordInput = dialogWindow.findViewById(R.id.sign_up_password_input);
         String email = Objects.requireNonNull(emailInput.getText()).toString();
         String password = Objects.requireNonNull(passwordInput.getText()).toString();
-        signInViewModel.signUp(email, password);
+        loginViewModel.signUp(email, password);
     }
 
     @Override
@@ -109,14 +109,14 @@ public class SignInFragment extends Fragment {
     }
 
     private void verifyIfHasSignInBefore() {
-        if (signInViewModel.isUserLogged())
+        if (loginViewModel.isUserLogged())
             changeToProfileActivity();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSignInBinding.inflate(inflater, container, false);
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
         signInGoogleButton();
         signInEmailButton();
         signUpButton();
@@ -128,7 +128,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void signIn() {
-        Intent signInIntent = signInViewModel.getGoogleSignInIntent();
+        Intent signInIntent = loginViewModel.getGoogleSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -136,7 +136,7 @@ public class SignInFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = signInViewModel.getGoogleSignInAccountFromIntent(data);
+            Task<GoogleSignInAccount> task = loginViewModel.getGoogleSignInAccountFromIntent(data);
             handleSignInResult(task);
         }
     }
@@ -153,8 +153,8 @@ public class SignInFragment extends Fragment {
 
     private void setLoggedWithSuccessIfAccountIsNotNull(Account account) {
         if (account != null) {
-            signInViewModel.setProgressBarStatus(false);
-            signInViewModel.setLoggedWithSuccess(true);
+            loginViewModel.setProgressBarStatus(false);
+            loginViewModel.setLoggedWithSuccess(true);
         }
     }
 
@@ -217,9 +217,7 @@ public class SignInFragment extends Fragment {
 
     private void dialogSignUpButton(Window dialogWindow) {
         Button signUpButton = dialogWindow.findViewById(R.id.sign_up_button);
-        signUpButton.setOnClickListener(view -> {
-            signInViewModel.setSignUpButtonClick(true);
-        });
+        signUpButton.setOnClickListener(view -> loginViewModel.setSignUpButtonClick(true));
     }
 
     @Override

@@ -13,7 +13,7 @@ import com.example.projet_login.repository.google.GoogleSignInRepository;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
 
-public class SignInViewModel extends AndroidViewModel {
+public class LoginViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> loggedWithSuccess = new MutableLiveData<>();
     private final MutableLiveData<Boolean> progressBarStatus = new MutableLiveData<>();
     private final MutableLiveData<Boolean> signUpButtonClick = new MutableLiveData<>();
@@ -21,7 +21,7 @@ public class SignInViewModel extends AndroidViewModel {
     private final GoogleSignInRepository googleSignInRepository;
 
 
-    public SignInViewModel(Application application) {
+    public LoginViewModel(Application application) {
         super(application);
         progressBarStatus.setValue(false);
         loggedWithSuccess.setValue(false);
