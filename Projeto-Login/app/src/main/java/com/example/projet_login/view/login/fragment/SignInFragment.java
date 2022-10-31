@@ -26,11 +26,15 @@ import com.example.projet_login.viewModel.login.SignInViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Objects;
 
 public class SignInFragment extends Fragment {
     private GoogleSignInRepository googleSignInRepository;
     private FragmentSignInBinding binding;
     private SignInViewModel signInViewModel;
+    private Dialog signUpDialog;
     private final int RC_SIGN_IN = 0;
 
     public SignInFragment() {
@@ -44,10 +48,11 @@ public class SignInFragment extends Fragment {
         initViewModel();
         observerProgressBarStatus();
         observerLoggedWithSuccess();
+        observerSignUpButton();
     }
 
     private void initViewModel() {
-        signInViewModel = new ViewModelProvider(this).get(SignInViewModel.class);
+        signInViewModel = new ViewModelProvider(requireActivity()).get(SignInViewModel.class);
     }
 
     private void observerProgressBarStatus() {
@@ -79,6 +84,24 @@ public class SignInFragment extends Fragment {
         Intent intent = new Intent(requireContext(), ProfileActivity.class);
         startActivity(intent);
         requireActivity().finish();
+    }
+
+    private void observerSignUpButton() {
+        signInViewModel.getSignUpButtonClick().observe(requireActivity(), click -> {
+            if (click) {
+                Window dialogWindow = signUpDialog.getWindow();
+                createAccount(dialogWindow);
+            }
+            signInViewModel.setSignUpButtonClick(false);
+        });
+    }
+
+    private void createAccount(Window dialogWindow) {
+        TextInputEditText emailInput = dialogWindow.findViewById(R.id.sign_up_email_input);
+        TextInputEditText passwordInput = dialogWindow.findViewById(R.id.sign_up_password_input);
+        String email = Objects.requireNonNull(emailInput.getText()).toString();
+        String password = Objects.requireNonNull(passwordInput.getText()).toString();
+        signInViewModel.signUp(email, password);
     }
 
     @Override
@@ -149,7 +172,10 @@ public class SignInFragment extends Fragment {
 
     private void configDialog(Dialog dialog) {
         dialog.setContentView(R.layout.dialog_sign_in_email);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
         dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialogSignInButton(dialog.getWindow());
@@ -165,7 +191,8 @@ public class SignInFragment extends Fragment {
     }
 
     private void dialogCloseButton(Dialog dialog) {
-        ImageButton closeDialogButton = dialog.getWindow().findViewById(R.id.sign_in_close_dialog_button);
+        ImageButton closeDialogButton =
+                dialog.getWindow().findViewById(R.id.sign_in_close_dialog_button);
         closeDialogButton.setOnClickListener(view -> dialog.cancel());
 
     }
@@ -175,9 +202,9 @@ public class SignInFragment extends Fragment {
     }
 
     private void createSignUpDialog() {
-        final Dialog dialog = new Dialog(requireActivity(), R.style.DialogSlideAnim);
-        configSignUpDialog(dialog);
-        dialog.show();
+        signUpDialog = new Dialog(requireActivity(), R.style.DialogSlideAnim);
+        configSignUpDialog(signUpDialog);
+        signUpDialog.show();
     }
 
     private void configSignUpDialog(Dialog dialog) {
@@ -193,14 +220,13 @@ public class SignInFragment extends Fragment {
     private void dialogSignUpButton(Window dialogWindow) {
         Button signUpButton = dialogWindow.findViewById(R.id.sign_up_button);
         signUpButton.setOnClickListener(view -> {
-            // Sign up
+            signInViewModel.setSignUpButtonClick(true);
         });
     }
 
     private void dialogSignUpCloseButton(Dialog dialog) {
         ImageButton closeDialogButton = dialog.getWindow().findViewById(R.id.sign_up_close_dialog_button);
         closeDialogButton.setOnClickListener(view -> dialog.cancel());
-
     }
 
     @Override
