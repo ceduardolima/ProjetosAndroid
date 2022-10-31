@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.projet_login.R;
 import com.example.projet_login.databinding.FragmentSignInBinding;
-import com.example.projet_login.repository.google.GoogleSignInRepository;
 import com.example.projet_login.view.profile.ProfileActivity;
 import com.example.projet_login.viewModel.login.SignInViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -31,10 +30,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.Objects;
 
 public class SignInFragment extends Fragment {
-    private GoogleSignInRepository googleSignInRepository;
     private FragmentSignInBinding binding;
     private SignInViewModel signInViewModel;
     private Dialog signUpDialog;
+    private Dialog signInDialog;
     private final int RC_SIGN_IN = 0;
 
     public SignInFragment() {
@@ -44,7 +43,6 @@ public class SignInFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        googleSignInRepository = new GoogleSignInRepository(requireContext());
         initViewModel();
         observerProgressBarStatus();
         observerLoggedWithSuccess();
@@ -111,7 +109,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void verifyIfHasSignInBefore() {
-        if (googleSignInRepository.hasSignInBefore())
+        if (signInViewModel.isUserLogged())
             changeToProfileActivity();
     }
 
@@ -130,7 +128,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void signIn() {
-        Intent signInIntent = googleSignInRepository.getSignInIntent();
+        Intent signInIntent = signInViewModel.getGoogleSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -138,7 +136,7 @@ public class SignInFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = googleSignInRepository.getSignedInAccountFromIntent(data);
+            Task<GoogleSignInAccount> task = signInViewModel.getGoogleSignInAccountFromIntent(data);
             handleSignInResult(task);
         }
     }
@@ -165,12 +163,12 @@ public class SignInFragment extends Fragment {
     }
 
     private void createSignInDialog() {
-        final Dialog dialog = new Dialog(requireActivity(), R.style.DialogSlideAnim);
-        configDialog(dialog);
-        dialog.show();
+        signInDialog = new Dialog(requireActivity(), R.style.DialogSlideAnim);
+        configSignInDialog(signInDialog);
+        signInDialog.show();
     }
 
-    private void configDialog(Dialog dialog) {
+    private void configSignInDialog(Dialog dialog) {
         dialog.setContentView(R.layout.dialog_sign_in_email);
         dialog.getWindow().setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -179,7 +177,7 @@ public class SignInFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialogSignInButton(dialog.getWindow());
-        dialogCloseButton(dialog);
+        dialogCloseButton(dialog, R.id.sign_in_close_dialog_button);
         dialog.create();
     }
 
@@ -190,9 +188,9 @@ public class SignInFragment extends Fragment {
         });
     }
 
-    private void dialogCloseButton(Dialog dialog) {
+    private void dialogCloseButton(Dialog dialog, int buttonID) {
         ImageButton closeDialogButton =
-                dialog.getWindow().findViewById(R.id.sign_in_close_dialog_button);
+                dialog.getWindow().findViewById(buttonID);
         closeDialogButton.setOnClickListener(view -> dialog.cancel());
 
     }
@@ -213,7 +211,7 @@ public class SignInFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialogSignUpButton(dialog.getWindow());
-        dialogSignUpCloseButton(dialog);
+        dialogCloseButton(dialog, R.id.sign_up_close_dialog_button);
         dialog.create();
     }
 
@@ -222,11 +220,6 @@ public class SignInFragment extends Fragment {
         signUpButton.setOnClickListener(view -> {
             signInViewModel.setSignUpButtonClick(true);
         });
-    }
-
-    private void dialogSignUpCloseButton(Dialog dialog) {
-        ImageButton closeDialogButton = dialog.getWindow().findViewById(R.id.sign_up_close_dialog_button);
-        closeDialogButton.setOnClickListener(view -> dialog.cancel());
     }
 
     @Override
