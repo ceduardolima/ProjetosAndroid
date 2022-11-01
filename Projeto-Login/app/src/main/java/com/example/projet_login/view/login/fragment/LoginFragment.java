@@ -1,9 +1,14 @@
 package com.example.projet_login.view.login.fragment;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.accounts.Account;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,6 +20,7 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -29,12 +35,17 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
     private LoginViewModel loginViewModel;
     private Dialog signUpDialog;
     private Dialog signInDialog;
+    private CircleImageView signUpUserImageButton;
     private final int RC_SIGN_IN = 0;
+    private final int RC_GALLERY = 1;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -97,15 +108,17 @@ public class LoginFragment extends Fragment {
     private void createAccount(Window dialogWindow) {
         TextInputEditText emailInput = dialogWindow.findViewById(R.id.sign_up_email_input);
         TextInputEditText passwordInput = dialogWindow.findViewById(R.id.sign_up_password_input);
+        TextInputEditText usernameInput = dialogWindow.findViewById(R.id.sign_up_email_input_layout);
         String email = Objects.requireNonNull(emailInput.getText()).toString();
         String password = Objects.requireNonNull(passwordInput.getText()).toString();
-        loginViewModel.signUp(email, password);
+        String username = Objects.requireNonNull(usernameInput.getText()).toString();
+        loginViewModel.signUp(email, password, username);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        verifyIfHasSignInBefore();
+        //verifyIfHasSignInBefore();
     }
 
     private void verifyIfHasSignInBefore() {
@@ -135,9 +148,15 @@ public class LoginFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = loginViewModel.getGoogleSignInAccountFromIntent(data);
-            handleSignInResult(task);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case RC_SIGN_IN:
+                    Task<GoogleSignInAccount> task = loginViewModel.getGoogleSignInAccountFromIntent(data);
+                    handleSignInResult(task);
+
+                case RC_GALLERY:
+                    setImageOnSignUpUserImageButton(data.getData());
+            }
         }
     }
 
@@ -148,6 +167,13 @@ public class LoginFragment extends Fragment {
         } catch (ApiException e) {
             Log.w("google_sign_in", "signInResult:failed code=" + e.getStatusCode());
             setLoggedWithSuccessIfAccountIsNotNull(null);
+        }
+    }
+
+    private void setImageOnSignUpUserImageButton(Uri uri) {
+        if (uri != null) {
+            signUpUserImageButton.setImageURI(uri);
+            signUpUserImageButton.setPadding(2, 2, 2, 2);
         }
     }
 
@@ -192,7 +218,6 @@ public class LoginFragment extends Fragment {
         ImageButton closeDialogButton =
                 dialog.getWindow().findViewById(buttonID);
         closeDialogButton.setOnClickListener(view -> dialog.cancel());
-
     }
 
     private void signUpButton() {
@@ -211,6 +236,7 @@ public class LoginFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialogSignUpButton(dialog.getWindow());
+        dialogSignUpUserImageButton(dialog.getWindow());
         dialogCloseButton(dialog, R.id.sign_up_close_dialog_button);
         dialog.create();
     }
@@ -218,6 +244,17 @@ public class LoginFragment extends Fragment {
     private void dialogSignUpButton(Window dialogWindow) {
         Button signUpButton = dialogWindow.findViewById(R.id.sign_up_button);
         signUpButton.setOnClickListener(view -> loginViewModel.setSignUpButtonClick(true));
+    }
+
+    private void dialogSignUpUserImageButton(Window dialogWindow) {
+        signUpUserImageButton = dialogWindow.findViewById(R.id.sign_up_user_image_button);
+        signUpUserImageButton.setOnClickListener(view -> startGalleryActivity());
+    }
+
+    private void startGalleryActivity() {
+        Intent iGallery = new Intent(Intent.ACTION_PICK);
+        iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(iGallery, RC_GALLERY);
     }
 
     @Override
